@@ -1,0 +1,35 @@
+﻿@page
+@model SoftwareVersionModel
+@{
+    ViewData["Title"] = "Software Version Search";
+}
+
+<h1>Software Version Search</h1>
+<span>Enter a version number to see software greater than that version:</span>
+<br/>
+<input type="text" id="searchTerm" placeholder="[major].[minor].[patch].[build].[compilation]" class="form-control"/>
+<br/>
+<button onclick="SoftwareVersion.search()" class="btn btn-primary">Submit</button>
+<br/>
+<div id="searchResults"></div>
+
+<script type="text/javascript">
+    $(function() {
+        $('#searchTerm').keypress(function(e) {
+            if (e.which === 13)
+                SoftwareVersion.search();
+        });
+    });
+
+    var SoftwareVersion = function() {
+        return{
+            search: function() {
+                $.get('/api/SoftwareVersion/Search',
+                    { searchTerm: $('#searchTerm').val() },
+                    function(data) {
+                        $('#searchResults').html(data);
+                    });
+            }
+        }
+    }();
+</script>
